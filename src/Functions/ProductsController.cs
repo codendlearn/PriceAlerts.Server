@@ -62,7 +62,7 @@ namespace PriceAlerts.Server.Functions
                 productsToAdd = new List<Product> { token.ToObject<Product>() };
             }
             else
-            {
+            {   
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
                 await response.WriteStringAsync("Please provide valid details.");
                 return response;
@@ -71,11 +71,16 @@ namespace PriceAlerts.Server.Functions
             var products = new List<Product>();
             foreach (var product in productsToAdd)
             {
+                if(string.IsNullOrWhiteSpace(product.Category))
+                {
+                    product.Category = "UnKnown";
+                } 
+
                 try
                 {
                     var tProduct = await scrapeService.GetProduct(product.Url);
                     tProduct.Title = string.IsNullOrWhiteSpace(product.Title) ? tProduct.Title : product.Title;
-                    tProduct.Category = string.IsNullOrWhiteSpace(product.Category) ? tProduct.Category : product.Category;
+                    tProduct.Category =  tProduct.Category ?? product.Category;
                     tProduct.TriggerPrice = product.Price;
                     tProduct.Id = Guid.NewGuid().ToString();
                     tProduct.AddedOn = DateTime.UtcNow;

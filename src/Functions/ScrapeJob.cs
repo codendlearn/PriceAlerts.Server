@@ -30,7 +30,7 @@ namespace PriceAlerts.Server.Functions
         [Function("ScrapeJob")]
         public async Task RunAsync([TimerTrigger("0 */5 * * * *", RunOnStartup = true)] MyInfo myTimer)
         {
-            logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");;
             logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
 
             var products = await cosmosRepository.GetAllActiveProductsAsync();

@@ -29,6 +29,9 @@ namespace PriceAlerts.Server.Services
             product.Price = doc.DocumentNode.GetProductPrice("priceblock_ourprice", "priceblock_dealprice");
             product.Title = doc.DocumentNode.GetValue("productTitle");
             product.Category = doc.DocumentNode.GetChildrenText("wayfinding-breadcrumbs_feature_div", "a");
+            if(string.IsNullOrWhiteSpace(product.Category))
+                product.Category = doc.DocumentNode.GetChildrenText("nav-progressive-subnav", "a");
+            
             product.ImageUrl = doc.DocumentNode.GetProductImage();
             return product;
         }
